@@ -4,7 +4,6 @@ import { User } from "../Models/User.models.js";
 export const Createaccount = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
-    const profile_pic = req.file.path;
 
     const user = await User.findOne({ email });
     if (user) {
@@ -25,6 +24,15 @@ export const Createaccount = async (req, res) => {
         message: "Password must be at least 4 characters",
       });
     }
+
+    if (!req.file || !req.file.path) {
+      return res.status(400).json({
+        success: false,
+        message: "Profile image is required",
+      });
+    }
+
+    const profile_pic = req.file.path;
     const cloud_save = await cloudinary.uploader.upload(profile_pic);
 
     const newuser = await User.create({
@@ -144,21 +152,26 @@ export const Updateaccount = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
     const { id } = req.user;
-    if (req.file.path) {
-      const profile_pic = req.file.path;
-      var cloud_save = await cloudinary.uploader.upload(profile_pic);
-    }
+
     const user = await User.findById(id);
-    user.name = name || user.name;
-    user.email = email || user.email;
-    user.password = password || user.password;
-    user.role = role || user.role;
-    user.profile_pic = cloud_save.secure_url || user.profile_pic;
     if (!user) {
       return res.status(400).json({
         success: false,
         message: "User not found",
       });
+    }
+
+    // Update simple fields
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.password = password || user.password;
+    user.role = role || user.role;
+
+    // Handle optional profile picture update
+    if (req.file && req.file.path) {
+      const profile_pic = req.file.path;
+      const cloud_save = await cloudinary.uploader.upload(profile_pic);
+      user.profile_pic = cloud_save.secure_url;
     }
 
     await user.save();

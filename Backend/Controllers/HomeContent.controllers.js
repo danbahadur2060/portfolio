@@ -4,8 +4,17 @@ import { HomeContent } from "../Models/HomeContent.models.js";
 export const createHomeContent = async (req, res) => {
     try {
         const {name,location,position,summary,description} = req.body;
+
+        if (!req.file || !req.file.path) {
+            return res.status(400).json({
+                success: false,
+                message: "Please upload a profile picture",
+            });
+        }
+
         const profile_pic = req.file.path;
-       const save_image = await cloudinary.uploader.upload(profile_pic, {folder: "profile_pics"});
+        const save_image = await cloudinary.uploader.upload(profile_pic, {folder: "profile_pics"});
+
         if(!name || !position || !summary){
             return res.status(400).json({
                 success: false,
