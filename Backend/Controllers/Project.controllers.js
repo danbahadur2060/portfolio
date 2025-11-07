@@ -1,6 +1,23 @@
 import { Project } from "../Models/Project.models.js";
 import cloudinary from "../Configs/cloudinary.configs.js";
 
+const uploadImage = async (file, options = {}) => {
+  if (!file) throw new Error("No file provided");
+  if (file.path) {
+    return await cloudinary.uploader.upload(file.path, options);
+  }
+  if (file.buffer) {
+    return await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(options, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+      stream.end(file.buffer);
+    });
+  }
+  throw new Error("Unsupported file input");
+};
+
 export const Createproject = async (req, res) => {
   try {
     const {
@@ -26,9 +43,7 @@ export const Createproject = async (req, res) => {
       });
     }
 
-    const feature_image = req.file.path;
-
-    const cloud_save = await cloudinary.uploader.upload(feature_image);
+    const cloud_save = await uploadImage(req.file);
 
     const project = await Project.create({
       title,
@@ -86,8 +101,7 @@ export const UpdateProject = async (req, res) => {
 
     // Only update image if a new file is uploaded
     if (req.file) {
-      const feature_image = req.file.path;
-      const cloud_save = await cloudinary.uploader.upload(feature_image);
+      const cloud_save = await uploadImage(req.file);
       updateData.image = cloud_save.secure_url;
     }
 

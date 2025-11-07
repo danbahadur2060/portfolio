@@ -1,6 +1,23 @@
 import cloudinary from "../Configs/cloudinary.configs.js";
 import { HomeContent } from "../Models/HomeContent.models.js";
 
+const uploadImage = async (file, options = {}) => {
+  if (!file) throw new Error("No file provided");
+  if (file.path) {
+    return await cloudinary.uploader.upload(file.path, options);
+  }
+  if (file.buffer) {
+    return await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(options, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+      stream.end(file.buffer);
+    });
+  }
+  throw new Error("Unsupported file input");
+};
+
 export const createHomeContent = async (req, res) => {
     try {
         const {name,location,position,summary,description} = req.body;
@@ -12,8 +29,7 @@ export const createHomeContent = async (req, res) => {
             });
         }
 
-        const profile_pic = req.file.path;
-        const save_image = await cloudinary.uploader.upload(profile_pic, {folder: "profile_pics"});
+        const save_image = await uploadImage(req.file, {folder: "profile_pics"});
 
         if(!name || !position || !summary){
             return res.status(400).json({

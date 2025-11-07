@@ -4,22 +4,26 @@ import path from "path";
 
 const uploadsDir = path.resolve(process.cwd(), "uploads");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    try {
-      // Ensure the uploads directory exists
-      if (!fs.existsSync(uploadsDir)) {
-        fs.mkdirSync(uploadsDir, { recursive: true });
-      }
-      cb(null, uploadsDir);
-    } catch (err) {
-      cb(err);
-    }
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname);
-  },
-});
+const isProd = process.env.NODE_ENV === "production";
+
+const storage = isProd
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination: function (req, file, cb) {
+        try {
+          // Ensure the uploads directory exists (dev/local only)
+          if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir, { recursive: true });
+          }
+          cb(null, uploadsDir);
+        } catch (err) {
+          cb(err);
+        }
+      },
+      filename: function (req, file, cb) {
+        cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname);
+      },
+    });
 
 export const upload = multer({
   storage: storage,

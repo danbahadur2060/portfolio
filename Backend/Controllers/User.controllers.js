@@ -1,6 +1,23 @@
 import cloudinary from "../Configs/cloudinary.configs.js";
 import { User } from "../Models/User.models.js";
 
+const uploadImage = async (file, options = {}) => {
+  if (!file) throw new Error("No file provided");
+  if (file.path) {
+    return await cloudinary.uploader.upload(file.path, options);
+  }
+  if (file.buffer) {
+    return await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(options, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+      stream.end(file.buffer);
+    });
+  }
+  throw new Error("Unsupported file input");
+};
+
 export const Createaccount = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -25,15 +42,14 @@ export const Createaccount = async (req, res) => {
       });
     }
 
-    if (!req.file || !req.file.path) {
+    if (!req.file) {
       return res.status(400).json({
         success: false,
         message: "Profile image is required",
       });
     }
 
-    const profile_pic = req.file.path;
-    const cloud_save = await cloudinary.uploader.upload(profile_pic);
+    const cloud_save = await uploadImage(req.file);
 
     const newuser = await User.create({
       name,
@@ -168,9 +184,8 @@ export const Updateaccount = async (req, res) => {
     user.role = role || user.role;
 
     // Handle optional profile picture update
-    if (req.file && req.file.path) {
-      const profile_pic = req.file.path;
-      const cloud_save = await cloudinary.uploader.upload(profile_pic);
+    if (req.file) {
+      const cloud_save = await uploadImage(req.file);
       user.profile_pic = cloud_save.secure_url;
     }
 

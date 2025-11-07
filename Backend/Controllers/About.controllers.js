@@ -1,6 +1,23 @@
 import cloudinary from "../Configs/cloudinary.configs.js";
 import { About } from "../Models/About.models.js";
 
+const uploadImage = async (file, options = {}) => {
+  if (!file) throw new Error("No file provided");
+  if (file.path) {
+    return await cloudinary.uploader.upload(file.path, options);
+  }
+  if (file.buffer) {
+    return await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(options, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+      stream.end(file.buffer);
+    });
+  }
+  throw new Error("Unsupported file input");
+};
+
 export const createAbout = async (req, res) => {
   try {
     const { name, email, title, bio, location } = req.body;
@@ -19,8 +36,7 @@ export const createAbout = async (req, res) => {
       });
     }
 
-    const profile_pic = req.file.path;
-    const image_save = await cloudinary.uploader.upload(profile_pic, {
+    const image_save = await uploadImage(req.file, {
       folder: "PortifolioWebsite",
       width: 200,
       height: 200,
@@ -90,8 +106,7 @@ export const updateAbout = async (req, res) => {
 
     // Only update image if a new file is uploaded
     if (req.file) {
-      const profile_pic = req.file.path;
-      const image_save = await cloudinary.uploader.upload(profile_pic, {
+      const image_save = await uploadImage(req.file, {
         folder: "PortifolioWebsite",
         width: 200,
         height: 200,

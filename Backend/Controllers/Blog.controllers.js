@@ -1,19 +1,34 @@
 import cloudinary from "../Configs/cloudinary.configs.js";
 import { Blog } from "../Models/Blog.models.js";
 
+const uploadImage = async (file, options = {}) => {
+  if (!file) throw new Error("No file provided");
+  if (file.path) {
+    return await cloudinary.uploader.upload(file.path, options);
+  }
+  if (file.buffer) {
+    return await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(options, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+      stream.end(file.buffer);
+    });
+  }
+  throw new Error("Unsupported file input");
+};
+
 export const createBlog = async (req, res) => {
   try {
     const { title, featured, content, tags } = req.body;
-    const image = req.file ? req.file.path : null;
-
-    if (!title || !content || !image) {
+    if (!title || !content || !req.file) {
       return res.status(400).json({
         success: false,
         message: "Title, content, and image are required",
       });
     }
 
-    const savedImage = await cloudinary.uploader.upload(image, {
+    const savedImage = await uploadImage(req.file, {
       folder: "blogs",
     });
 
@@ -87,8 +102,7 @@ export const updateBlog = async (req, res) => {
 
     // Only update image if a new file is uploaded
     if (req.file) {
-      const image = req.file.path;
-      const savedImage = await cloudinary.uploader.upload(image, {
+      const savedImage = await uploadImage(req.file, {
         folder: "blogs",
       });
       updateData.image = savedImage.secure_url;
