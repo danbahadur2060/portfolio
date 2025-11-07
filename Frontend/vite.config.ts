@@ -76,17 +76,10 @@ export default defineConfig(({ mode }) => {
       },
       rollupOptions: {
         output: {
-          manualChunks: {
-            // Split UI components into separate chunks
-            ui: ["./src/components/ui"],
-            // Split vendor chunks for better caching
-            "vendor-react": ["react", "react-dom", "react-router-dom"],
-            "vendor-ui": [
-              "next-themes",
-              "lucide-react",
-              "tailwind-merge",
-              "class-variance-authority",
-            ],
+          // Keep dependency ordering intact to avoid runtime issues (e.g., React before lucide-react)
+          manualChunks(id) {
+            if (id.includes('node_modules')) return 'vendor';
+            if (id.includes('/src/components/ui')) return 'ui';
           },
           // Use hashed filenames for better caching
           entryFileNames: isProd
