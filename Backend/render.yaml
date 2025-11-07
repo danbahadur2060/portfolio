@@ -1,0 +1,24 @@
+# Render service definition for Backend (fill placeholders before using)
+# See: https://render.com/docs/deploy-using-render-yaml
+services:
+  - type: web
+    name: portfolio-backend
+    env: node
+    plan: free
+    repo: "<REPLACE_WITH_GITHUB_REPO_URL>" # e.g. https://github.com/youruser/yourrepo
+    branch: main
+    buildCommand: "cd Backend && npm ci"
+    startCommand: "cd Backend && npm start"
+    envVars:
+      - key: MONGO_URI
+        value: "<YOUR_MONGO_URI>"
+      - key: JWT_SECRET
+        value: "<YOUR_JWT_SECRET>"
+      - key: CLOUDINARY_CLOUD_NAME
+        value: "<CLOUD_NAME>"
+      - key: CLOUDINARY_API_KEY
+        value: "<API_KEY>"
+      - key: CLOUDINARY_API_SECRET
+        value: "<API_SECRET>"
+    autoDeploy: true
+    healthCheckPath: "/api/getabout"

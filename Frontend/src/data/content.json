@@ -1,0 +1,36 @@
+{
+  "personal": {
+    "name": "Alex Johnson",
+    "title": "Full-Stack Developer & UI/UX Designer",
+    "tagline": "Crafting digital experiences that matter",
+    "description": "I'm a passionate full-stack developer with 5+ years of experience building modern web applications. I specialize in React, Next.js, and creating beautiful, accessible user interfaces.",
+    "email": "alex@example.com",
+    "phone": "+1 (555) 123-4567",
+    "location": "San Francisco, CA",
+    "avatar": "https://media.licdn.com/dms/image/v2/D4D03AQGsnmc8EsjZBw/profile-displayphoto-scale_200_200/B4DZjHWpioHwAY-/0/1755691261305?e=2147483647&v=beta&t=dTddX_XeULlzR0UTLVSWWxNT9jziD3yt8Lfjo2EEC9c",
+    "social": {
+      "github": "https://github.com/alexjohnson",
+      "linkedin": "https://linkedin.com/in/alexjohnson",
+      "twitter": "https://twitter.com/alexjohnson",
+      "dribbble": "https://dribbble.com/alexjohnson"
+    }
+  },
+  "skills": [
+    "React", "Next.js", "TypeScript", "Node.js", "Python", "PostgreSQL", 
+    "Tailwind CSS", "Figma", "AWS", "Docker", "GraphQL", "REST APIs"
+  ],
+  "experience": [
+    {
+      "company": "TechCorp Inc.",
+      "position": "Senior Full-Stack Developer",
+      "duration": "2022 - Present",
+      "description": "Lead development of modern web applications using React and Node.js"
+    },
+    {
+      "company": "StartupXYZ",
+      "position": "Frontend Developer",
+      "duration": "2020 - 2022",
+      "description": "Built responsive UIs and implemented design systems"
+    }
+  ]
+}

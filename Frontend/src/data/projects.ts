@@ -1,0 +1,52 @@
+export const projectsData = {
+  "projects": [
+    {
+      "id": "ecommerce-platform",
+      "title": "E-commerce Platform",
+      "description": "A full-stack e-commerce platform with React, Node.js, and Stripe integration",
+      "longDescription": "Built a comprehensive e-commerce solution featuring user authentication, product management, shopping cart functionality, and secure payment processing. The platform includes an admin dashboard for inventory management and analytics.",
+      "image": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop",
+      "technologies": ["React", "Node.js", "PostgreSQL", "Stripe", "Tailwind CSS"],
+      "liveUrl": "https://demo-ecommerce.com",
+      "githubUrl": "https://github.com/alexjohnson/ecommerce-platform",
+      "featured": true,
+      "category": "Full-Stack"
+    },
+    {
+      "id": "task-management-app",
+      "title": "Task Management App",
+      "description": "A collaborative task management application with real-time updates",
+      "longDescription": "Developed a modern task management application with real-time collaboration features, drag-and-drop functionality, and team management capabilities. Features include project boards, time tracking, and notification system.",
+      "image": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",
+      "technologies": ["React", "TypeScript", "Socket.io", "MongoDB", "Material-UI"],
+      "liveUrl": "https://taskapp-demo.com",
+      "githubUrl": "https://github.com/alexjohnson/task-manager",
+      "featured": true,
+      "category": "Frontend"
+    },
+    {
+      "id": "weather-dashboard",
+      "title": "Weather Dashboard",
+      "description": "A responsive weather dashboard with location-based forecasts",
+      "longDescription": "Created a beautiful weather dashboard that provides detailed weather information with location-based forecasts, interactive maps, and weather alerts. Features include 7-day forecasts, weather animations, and data visualization.",
+      "image": "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&h=600&fit=crop",
+      "technologies": ["React", "D3.js", "OpenWeather API", "Tailwind CSS"],
+      "liveUrl": "https://weather-dashboard-demo.com",
+      "githubUrl": "https://github.com/alexjohnson/weather-dashboard",
+      "featured": false,
+      "category": "Frontend"
+    },
+    {
+      "id": "blog-cms",
+      "title": "Blog CMS",
+      "description": "A headless CMS for blogs with markdown support and SEO optimization",
+      "longDescription": "Built a modern headless CMS specifically designed for blogs and content creators. Features include markdown editor, SEO optimization, image management, analytics dashboard, and multi-user support with role-based permissions.",
+      "image": "https://images.unsplash.com/photo-1486312338219-ce68e2c6b612?w=800&h=600&fit=crop",
+      "technologies": ["Next.js", "Node.js", "MongoDB", "AWS S3", "Next-Auth"],
+      "liveUrl": "https://blog-cms-demo.com",
+      "githubUrl": "https://github.com/alexjohnson/blog-cms",
+      "featured": true,
+      "category": "Full-Stack"
+    }
+  ]
+};
