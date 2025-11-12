@@ -1,0 +1,29 @@
+# Default rules for all bots
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/cache/
+# If you have any private/draft folders, add them here:
+# Disallow: /drafts/
+Allow: /_next/static/
+Allow: /_next/image/
+Allow: /static/
+Allow: /assets/
+
+# Prevent indexing of parameterized URLs that create thin/duplicate content
+# (this blocks URLs with query strings from being crawled — remove if you rely on query-string pages)
+Disallow: /*?*
+
+# Google-specific allowances / crawl hints
+User-agent: Googlebot
+Allow: /_next/static/
+Allow: /_next/image/
+# Google ignores Crawl-delay, but some other crawlers respect it below.
+
+# Polite crawl delay for other crawlers (helps preserve server resources)
+User-agent: *
+Crawl-delay: 10
+
+# Helpful pointers
+Sitemap: https://danbahadur.vercel.app/sitemap.xml
+Host: danbahadur.vercel.app
